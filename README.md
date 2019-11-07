@@ -1,2 +1,2 @@
 # Music-Genre-Classification
-A Deep Learning approach for Music Genre Classification- The project of the course, signal processing and ML.
+A Deep Learning approach for Music Genre Classification- The project related to the course "ML applications in Signal Proceesing"
