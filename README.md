@@ -3,7 +3,7 @@ This repository contains project code for _CPSC 554X: Machine Learning and Signa
 [Download the FMA-small dataset and the metadata here.](https://github.com/mdeff/fma)
 
 ## Code Description
-`main.ipynb` has the main source code for processing the dataset.
+`main.ipynb` has the main source code for processing the dataset.  
 `Spectrograms.ipynb` generates choice spectrograms from each genre label, showing how some unique differences can be seen in each genre. 
 
 ## Initial List of Experiments
@@ -13,5 +13,6 @@ This repository contains project code for _CPSC 554X: Machine Learning and Signa
 - Trying out different ways of combining the RNN+CNN in the parallel method - other types of ensembling, perhaps. 
 - Trying out different # of layers for the RNN and CNNs in our models. 
 - Adding additional hand-crafted feature-based classification and use ensembling methods. 
-- (and more as we continue to do our research/experiment with different approaches…)  
+
+(and more as we continue to do our research/experiment with different approaches…)  
 
