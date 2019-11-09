@@ -1,5 +1,5 @@
 # A Deep Learning Approach for Music Genre Classification
-This repository contains project code for _CPSC 554X: Machine Learning and Signal Processing_.
+This repository contains project code for _CPSC 554X: Machine Learning and Signal Processing_.  
 [Download the FMA-small dataset and the metadata here.](https://github.com/mdeff/fma)
 
 ## Code Description
@@ -14,5 +14,5 @@ This repository contains project code for _CPSC 554X: Machine Learning and Signa
 - Trying out different # of layers for the RNN and CNNs in our models. 
 - Adding additional hand-crafted feature-based classification and use ensembling methods. 
 
-(and more as we continue to do our research/experiment with different approaches…)  
+_(and more as we continue to do our research/experiment with different approaches…)_  
 
