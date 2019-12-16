@@ -35,25 +35,25 @@ X_valid = npzfile['arr_0']
 y_valid = npzfile['arr_1']
 #print(X_valid.shape, y_valid.shape)
 #batch_size = 64
+
+
 num_classes = 8
-n_features = X_train.shape[2]
-n_time = X_train.shape[1]
 nb_filters1=16 
 nb_filters2=32 
 nb_filters3=64
-nb_filters4=64
+nb_filters4=128
 nb_filters5=64
 ksize = (3,1)
 pool_size_1= (2,2) 
 pool_size_2= (4,4)
-pool_size_3 = (4,2)
+pool_size_3 = (2,1)
 
 dropout_prob = 0.20
 dense_size1 = 128
-lstm_count = 128
+lstm_count = 64
 num_units = 120
 
-BATCH_SIZE = 32
+BATCH_SIZE = 64
 EPOCH_COUNT = 50
 L2_regularization = 0.001
 
@@ -85,9 +85,9 @@ def conv_recurrent_model_build(model_input):
     pool_5 = MaxPooling2D(pool_size_2)(conv_5)
 
     flatten1 = Flatten()(pool_5)
-    attention_prob = Activation('softmax')(flatten1)
-    attention_prob = RepeatVector(256)(attention_prob)
-    attention_prob = Permute([2, 1])(attention_prob)
+#     attention_prob = Activation('softmax')(flatten1)
+#     attention_prob = RepeatVector(256)(attention_prob)
+#     attention_prob = Permute([2, 1])(attention_prob)
     #attrention_prob = Dense(256, activation = 'softmax', name='attention-probabilities')(flatten1)
     ### Recurrent Block
     
@@ -101,14 +101,15 @@ def conv_recurrent_model_build(model_input):
 #     dense1 = Dense(dense_size1)(flatten)
     
     # Bidirectional GRU
-    lstm = Bidirectional(GRU(lstm_count))(squeezed)  #default merge mode is concat
-    
+    lstm1 = Bidirectional(GRU(lstm_count, return_sequences=True))(squeezed)  #default merge mode is concat
+    lstm2 = Bidirectional(GRU(lstm_count))(lstm1)
+                          
     # Concat Output
-    #concat = concatenate([flatten1, lstm], axis=-1, name ='concat')
-    sent_representation=Multiply()([attention_prob,lstm])
-    sent_representation = Lambda(lambda xin: K.sum(xin, axis=-2))(sent_representation)
+    concat = concatenate([flatten1, lstm2], axis=-1, name ='concat')
+    # sent_representation=Multiply()([attention_prob,lstm])
+    # sent_representation = Lambda(lambda xin: K.sum(xin, axis=-2))(sent_representation)
     ## Softmax Output
-    output = Dense(num_classes, activation = 'softmax', name='preds')(sent_representation)
+    output = Dense(num_classes, activation = 'softmax', name='preds')(concat)
     #output = Dense(num_classes, activation = 'softmax', name='preds')(concat)
    
     model_output = output
@@ -124,6 +125,11 @@ def conv_recurrent_model_build(model_input):
     
     print(model.summary())
     return model
+
+
+
+
+    
 def train_model(x_train, y_train, x_val, y_val):
     
     n_frequency = 128
@@ -144,9 +150,8 @@ def train_model(x_train, y_train, x_val, y_val):
 #     tb_callback = TensorBoard(log_dir='./logs/4', histogram_freq=1, batch_size=32, write_graph=True, write_grads=False,
 #                               write_images=False, embeddings_freq=0, embeddings_layer_names=None,
 #                               embeddings_metadata=None)
-    checkpoint_callback = ModelCheckpoint('new_withoutcuda_weights.best.h5', monitor='val_accuracy', verbose=1,
+    checkpoint_callback = ModelCheckpoint('kevin-test-weights.best.h5', monitor='val_accuracy', verbose=1,
                                           save_best_only=True, mode='max')
-    
     reducelr_callback = ReduceLROnPlateau(
                 monitor='val_accuracy', factor=0.5, patience=10, min_delta=0.01,
                 verbose=1
